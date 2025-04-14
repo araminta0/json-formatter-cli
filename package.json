@@ -1,0 +1,25 @@
+{
+  "name": "json-formatter-cli",
+  "version": "1.0.0",
+  "description": "A simple CLI tool for formatting, validating and compressing JSON files",
+  "main": "index.js",
+  "bin": {
+    "jsonf": "./bin/jsonf.js"
+  },
+  "scripts": {
+    "start": "node bin/jsonf.js"
+  },
+  "keywords": [
+    "json",
+    "formatter",
+    "cli",
+    "beautify",
+    "minify",
+    "validate"
+  ],
+  "author": "araminta0",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^9.4.1"
+  }
+}
