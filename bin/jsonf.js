@@ -13,6 +13,7 @@ program
   .option('-c, --compact', 'compress JSON (remove whitespace)')
   .option('-i, --indent <number>', 'indentation spaces (default: 2)', '2')
   .option('-o, --output <file>', 'output file (default: stdout)')
+  .option('-v, --validate', 'only validate JSON syntax without formatting')
   .action((file, options) => {
     try {
       let jsonData;
@@ -44,25 +45,47 @@ program
   });
 
 function processJson(jsonData, options) {
+  if (!jsonData.trim()) {
+    console.error('Error: Empty input');
+    process.exit(1);
+  }
+
   try {
     const parsed = JSON.parse(jsonData);
+    
+    // Validate mode
+    if (options.validate) {
+      console.log('✅ Valid JSON');
+      return;
+    }
+    
     let result;
+    const indent = parseInt(options.indent);
+    
+    if (isNaN(indent) || indent < 0) {
+      console.error('Error: Indent must be a non-negative number');
+      process.exit(1);
+    }
     
     if (options.compact) {
       result = JSON.stringify(parsed);
     } else {
-      const indent = parseInt(options.indent);
       result = JSON.stringify(parsed, null, indent);
     }
     
     if (options.output) {
-      fs.writeFileSync(options.output, result);
-      console.log(`Formatted JSON saved to ${options.output}`);
+      try {
+        fs.writeFileSync(options.output, result);
+        console.log(`✅ Formatted JSON saved to ${options.output}`);
+      } catch (writeError) {
+        console.error(`Error writing to file: ${writeError.message}`);
+        process.exit(1);
+      }
     } else {
       console.log(result);
     }
   } catch (error) {
-    console.error('Invalid JSON:', error.message);
+    console.error('❌ Invalid JSON syntax:', error.message);
     process.exit(1);
   }
 }
