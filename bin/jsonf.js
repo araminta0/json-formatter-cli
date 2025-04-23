@@ -4,6 +4,17 @@ const { program } = require('commander');
 const fs = require('fs');
 const path = require('path');
 
+function sortKeys(key, value) {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const sorted = {};
+    Object.keys(value).sort().forEach(k => {
+      sorted[k] = value[k];
+    });
+    return sorted;
+  }
+  return value;
+}
+
 program
   .version('1.0.0')
   .description('JSON formatter and validator CLI tool');
@@ -14,6 +25,7 @@ program
   .option('-i, --indent <number>', 'indentation spaces (default: 2)', '2')
   .option('-o, --output <file>', 'output file (default: stdout)')
   .option('-v, --validate', 'only validate JSON syntax without formatting')
+  .option('-s, --sort', 'sort object keys alphabetically')
   .action((file, options) => {
     try {
       let jsonData;
@@ -68,9 +80,9 @@ function processJson(jsonData, options) {
     }
     
     if (options.compact) {
-      result = JSON.stringify(parsed);
+      result = JSON.stringify(parsed, options.sort ? sortKeys : null);
     } else {
-      result = JSON.stringify(parsed, null, indent);
+      result = JSON.stringify(parsed, options.sort ? sortKeys : null, indent);
     }
     
     if (options.output) {

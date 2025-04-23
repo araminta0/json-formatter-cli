@@ -42,6 +42,8 @@ jsonf --help
 - `-c, --compact`: Compress JSON (remove whitespace)
 - `-i, --indent <number>`: Set indentation spaces (default: 2)
 - `-o, --output <file>`: Save to output file instead of stdout
+- `-v, --validate`: Only validate JSON syntax without formatting
+- `-s, --sort`: Sort object keys alphabetically
 - `-h, --help`: Show help information
 - `-V, --version`: Show version
 
@@ -55,4 +57,14 @@ jsonf data.json -i 4
 Compress and save to new file:
 ```bash
 jsonf data.json -c -o compressed.json
+```
+
+Validate JSON syntax:
+```bash
+jsonf data.json -v
+```
+
+Sort object keys alphabetically:
+```bash
+jsonf data.json -s
 ```
